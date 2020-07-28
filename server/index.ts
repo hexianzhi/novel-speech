@@ -10,7 +10,7 @@ app.use(router.routes()).use(router.allowedMethods())
 start()
 
 async function start() {
-    const port = 3000
+    const port = 3003
     await app.listen(port)
     const ip = getIPAddress()
     console.log('koa 已经成功运行!!预览网址:', `${ip}:${port}`)

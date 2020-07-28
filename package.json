@@ -36,11 +36,11 @@
     "urijs": "^1.19.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "client:start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "npm-run-all --parallel start server:dev server:start",
+    "dev": "npm-run-all --parallel client:start server:dev server:start",
     "server:start": "cross-env NODE_ENV=development pm2 start ./dist/index.js --watch -f",
     "server:dev": "cross-env NODE_ENV=development gulp",
     "server:prod": "cross-env NODE_ENV=production gulp"
