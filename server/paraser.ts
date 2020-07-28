@@ -3,7 +3,8 @@ import cheerio from 'cheerio'
 function parseHTML (html: string) {
   // console.log('-----html----> ', html)
   const $ = cheerio.load(html)
-  const books = []
+  const books = [] as Noval.ISearchResp[]
+
   $('.grid tr').each((index, trEle) => {
     if (!index) return
     const tds = $(trEle).find('td')
@@ -35,6 +36,7 @@ function parseHTML (html: string) {
   })
   // books
   console.log('-----books----> ', books)
+  return books
   // console.log('-----table----> ', table)
 }
 
