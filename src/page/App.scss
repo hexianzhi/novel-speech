@@ -1,0 +1,24 @@
+.App {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  // align-items: center;
+  .search-container {
+    height: 400px;
+    .app-name {
+      text-align: center;
+      font-size: 50px;
+      margin-top: 150px;
+      margin-bottom: 50px;
+    }
+    .novel-search{
+      border-radius: 28px;
+      padding: 10px 11px;
+       &:hover {
+         box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
+         border-color: rgba(223,225,229,0);
+       }
+    }
+  }
+}

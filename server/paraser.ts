@@ -1,7 +1,6 @@
 import cheerio from 'cheerio'
 
 function parseHTML (html: string) {
-  // console.log('-----html----> ', html)
   const $ = cheerio.load(html)
   const books = [] as Noval.ISearchResp[]
 
@@ -34,10 +33,7 @@ function parseHTML (html: string) {
    
     books.push(bookItem)
   })
-  // books
-  console.log('-----books----> ', books)
   return books
-  // console.log('-----table----> ', table)
 }
 
 export default parseHTML

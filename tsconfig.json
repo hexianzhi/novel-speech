@@ -19,9 +19,14 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "typeRoots" : ["./types"]
+    "typeRoots": [
+      "./types"
+    ],
+    "baseUrl": "./"
   },
   "include": [
-    "src", "types/global.d.ts", "server"
+    "src",
+    "types/global.d.ts",
+    "server"
   ]
 }

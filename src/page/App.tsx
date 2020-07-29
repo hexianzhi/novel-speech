@@ -1,7 +1,8 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import { Input } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
+import Http from 'src/utils/axios'
 
 const { Search } = Input;
 const suffix = (
@@ -13,31 +14,47 @@ const suffix = (
   />
 );
 
+class App extends React.Component {
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <Search
-      placeholder="input search text"
-      onSearch={value => console.log(value)}
-      style={{ width: 200 }}
-    />
-    </div>
-  );
+  constructor (props) {
+    super(props)
+    this.state = {
+      bookList: [] as Noval.ISearchResp []
+    }
+  }
+
+  componentDidMount () {
+
+  }
+
+  handleOnSearch = (value) => {
+    Http.get('search',{
+      params: {searchkey: value},
+    }).then((res) => {
+      console.log('-----res----> ', res)
+      this.setState({bookList: res})
+
+    }).catch((err) => {
+      console.log('请求失败,失败: ', err)
+
+    })
+  }
+
+  render () {
+    return (
+      <div className="App">
+        <div className={'search-container'}>
+          <div className={'app-name'}>Novel Speech</div>
+          <Search
+            className={'novel-search'}
+            placeholder="input search text"
+            onSearch={this.handleOnSearch}
+            style={{ width: 500 }}
+          />
+        </div>
+      </div>
+    )
+  }
 }
-
+ 
 export default App;

@@ -7,24 +7,19 @@ const router = new Router()
 
 const testURl = 'http://www.xbiquge.la/modules/article/waps.php?'
 const key = 'searchkey='
-const value = '轮回'
 
 router.get('/search', async (ctx: any) => {
+  const {searchkey} = ctx.query
+  const url = testURl + key + encodeURIComponent(searchkey)
 
-  const url = testURl + key + encodeURIComponent(value)
-  const result = await Request.requestDocument(url, ctx) as unknown as string
+  const resp = await Request.requestDocument(url, ctx) as unknown as string
+ 
   // @ts-ignore unicode 编码解析成字符串
-  const outerHTML = DomUtils.getOuterHTML(parseDOM(result))
-  parseHTML(outerHTML)
-  // console.log('-----result----> ', result)
-  // console.log('-----outerHTML----> ', outerHTML)
+  const outerHTML = DomUtils.getOuterHTML(parseDOM(resp))
+  const result = parseHTML(outerHTML)
 
   if (result) {
-  //   ctx.body = {
-  //     success: true,
-  //     data: outerHTML
-  //  } 
-  ctx.body = outerHTML
+    ctx.body = result
   } else {
     ctx.throw(400, '请输入关键词')
   }
