@@ -27,16 +27,18 @@ router.get('/search', async (ctx: any) => {
 
 
 router.get('/bookInfo', async (ctx: any) => {
+  console.log('ctx.query.url: ', ctx.query.url);
   if (!ctx.query.url) ctx.throw(400, '找不到地址')
   const resp = await Request.requestDocument(ctx.query.url, ctx) as unknown as string
   // @ts-ignore unicode 编码解析成字符串
   const outerHTML = DomUtils.getOuterHTML(parseDOM(resp))
+  // console.log('outerHTML: ', outerHTML);
   const result = parseBookInfo(outerHTML)
-  if (result) {
-    ctx.body = result
-  } else {
-    ctx.throw(400, '解析失败')
-  }
+  // if (result) {
+  //   ctx.body = result
+  // } else {
+  //   ctx.throw(400, '解析失败')
+  // }
 })
 
  

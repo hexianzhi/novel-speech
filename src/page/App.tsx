@@ -83,7 +83,8 @@ class App extends React.Component<any, IState> {
         author: '小蚊子',
         lastUpdate: '6-12'
       }]
-      this.setState({bookList: testData})
+      if (!data) data = testData
+      this.setState({bookList: data})
     }).catch((err) => {
       console.log('请求失败,失败: ', err)
     })

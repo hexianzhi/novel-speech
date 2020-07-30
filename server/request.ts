@@ -9,7 +9,7 @@ function createRequest () {
 
     const http = axios.create({
       timeout: defaultTimeout,
-      method: 'post'
+      method: 'get'
     })
     http.interceptors.request.use(config => {
       let proxyURL
