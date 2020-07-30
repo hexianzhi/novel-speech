@@ -9,6 +9,7 @@ let http = axios.create({
   timeout: 12000
   // responseType: 'json',
 })
+http.interceptors.response.use(rsp => rsp.data, error => Promise.reject(error))
  
 
 export default http

@@ -39,12 +39,12 @@
     "urijs": "^1.19.2"
   },
   "scripts": {
-    "client:start": "react-app-rewired start",
+    "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
-    "start": "npm-run-all --parallel client:start server:build server:start",
-    "server:start": "cross-env NODE_ENV=development supervisor -w ./dist/ ./dist/index.js",
+    "server:start": "npm-run-all --parallel server:build server:watch",
+    "server:watch": "cross-env NODE_ENV=development supervisor -w ./dist/ ./dist/index.js",
     "server:build": "cross-env NODE_ENV=development gulp",
     "server:prod": "cross-env NODE_ENV=production gulp"
   },

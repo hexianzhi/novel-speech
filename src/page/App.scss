@@ -1,24 +1,49 @@
+$prefix: app-page;
+
 .App {
   height: 100%;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  // align-items: center;
-  .search-container {
-    height: 400px;
-    .app-name {
-      text-align: center;
-      font-size: 50px;
-      margin-top: 150px;
-      margin-bottom: 50px;
+  // display: flex;
+  // justify-content: center;
+ 
+  .#{$prefix} {
+    &-search {
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 150px;
+      transition: 0.5s all;
+      &-top {
+        padding-top: 0;
+        height: 150px;
+        padding-bottom: 30px;
+        .#{$prefix}-search-name {
+          margin-bottom: 10px;
+        }
+      }
+      &-name {
+        text-align: center;
+        font-size: 50px;
+        margin-bottom: 50px;
+      }
+      &-input{
+        border-radius: 28px;
+        padding: 10px 11px;
+         &:hover {
+           box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
+           border-color: rgba(223,225,229,0);
+         }
+      }
     }
-    .novel-search{
-      border-radius: 28px;
-      padding: 10px 11px;
-       &:hover {
-         box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
-         border-color: rgba(223,225,229,0);
-       }
+    // 表格
+    &-table-wrapper {
+      padding: 0 20%;
     }
   }
+}
+
+.link {
+  color:blue;
+  cursor: pointer;
 }
