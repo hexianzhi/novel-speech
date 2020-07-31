@@ -38,7 +38,7 @@ function parseSearchResult (html: string) {
 
 const updateTimeReg =  /(最后更新(.+|\s+))/
 
-function parseBookInfo (html: string) {
+function parseBookInfo (html: string): Noval.IBookInfoNode {
   const $ = cheerio.load(html)
   console.log('html: ', html);
 
@@ -50,7 +50,7 @@ function parseBookInfo (html: string) {
   if (regArray) lastUpdateTime = regArray[1]
   if (lastUpdateTime) lastUpdateTime  = lastUpdateTime.trim()
   
-  const chapterList: any[] = []
+  const chapterList: Noval.IChapterInfo[] = []
   $('.box_con #list dd').each((index, ddItem) =>{
     const link = $(ddItem).find('a').attr('href')
     const chapterName = $(ddItem).find('a').text()
@@ -62,10 +62,11 @@ function parseBookInfo (html: string) {
   console.log('chapterList: ', chapterList);
   console.log('imgSrc: ', imgSrc);
   console.log('lastUpdateTime: ', lastUpdateTime);
-  // return {
-  //   imgSrc,
-  //   lastUpdateTime
-  // }
+  return {
+    imgSrc,
+    lastUpdateTime,
+    chapterList
+  }
 }
 
 

@@ -10,6 +10,7 @@ const key = 'searchkey='
 
 router.get('/search', async (ctx: any) => {
   const {searchkey} = ctx.query
+  console.log('searchkey: ', searchkey);
   
   const url = testURl + key + encodeURIComponent(searchkey)
   const resp = await Request.requestDocument(url, ctx) as unknown as string
@@ -18,7 +19,7 @@ router.get('/search', async (ctx: any) => {
   const outerHTML = DomUtils.getOuterHTML(parseDOM(resp))
   const result = parseSearchResult(outerHTML)
 
-  if (result) {
+  if (result instanceof Object) {
     ctx.body = result
   } else {
     ctx.throw(400, '解析失败')
@@ -27,30 +28,32 @@ router.get('/search', async (ctx: any) => {
 
 
 router.get('/bookInfo', async (ctx: any) => {
-  console.log('ctx.query.url: ', ctx.query.url);
+  console.log('bookInfoctx.query.url: ', ctx.query.url);
   if (!ctx.query.url) ctx.throw(400, '找不到地址')
   const resp = await Request.requestDocument(ctx.query.url, ctx) as unknown as string
   // @ts-ignore unicode 编码解析成字符串
   const outerHTML = DomUtils.getOuterHTML(parseDOM(resp))
-  // console.log('outerHTML: ', outerHTML);
   const result = parseBookInfo(outerHTML)
-  // if (result) {
-  //   ctx.body = result
-  // } else {
-  //   ctx.throw(400, '解析失败')
-  // }
+
+  // @ts-ignore
+  if (result instanceof Object) {
+    ctx.body = result
+  } else {
+    ctx.throw(400, '解析失败')
+  }
 })
 
  
 
 router.get('/bookDetail', async (ctx: any) => {
+  console.log('bookDetail ctx.query.url: ', ctx.query.url);
   if (!ctx.query.url) ctx.throw(400, '找不到地址')
 
   const resp = await Request.requestDocument(ctx.query.url, ctx) as unknown as string
   // @ts-ignore unicode 编码解析成字符串
   const outerHTML = DomUtils.getOuterHTML(parseDOM(resp))
   const result = parseBookDetail(outerHTML)
-  if (result) {
+  if (result instanceof Object) {
     ctx.body = result
   } else {
     ctx.throw(400, '解析失败')

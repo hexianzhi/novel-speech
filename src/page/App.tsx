@@ -2,10 +2,12 @@ import React from 'react';
 import './App.scss';
 import { Input, Table } from 'antd';
 import Http from 'src/utils/axios'
+import BookInfo from './booInfo'
 const { Search } = Input;
 
 interface IState {
-  bookList: Noval.ISearchResp[]
+  searchResultList: Noval.ISearchResp[]
+  bookInfo: Noval.IBookInfo
 }
 
 
@@ -43,7 +45,8 @@ class App extends React.Component<any, IState> {
   constructor (props) {
     super(props)
     this.state = {
-      bookList: [] as Noval.ISearchResp []
+      searchResultList: [] as Noval.ISearchResp [],
+      bookInfo: {} as Noval.IBookInfo
     }
   }
 
@@ -51,14 +54,22 @@ class App extends React.Component<any, IState> {
 
   }
 
-  handleBookClick = (bookLink: string, isName = false) => {
+  /** 搜素结果列表点击事件 */
+  handleSearchResultClick = (result: Noval.ISearchResp, isName = false) => {
     const api = isName ? 'bookInfo' : 'bookDetail'
+    const url = isName ? result.nameLink : result.newestChapterLink
     Http.get(api, {
       params: {
-        url: bookLink
+        url
       }
-    }).then((res) => {
-      console.log('res: ', res);
+    }).then((res: any) => {
+      if (isName) {
+        const info = Object.assign(res, result)
+        this.setState({bookInfo: info})
+      } else {
+        
+      }
+ 
     }).catch(err => {
       console.log('err: ', err);
     })
@@ -84,7 +95,7 @@ class App extends React.Component<any, IState> {
         lastUpdate: '6-12'
       }]
       if (!data) data = testData
-      this.setState({bookList: data})
+      this.setState({searchResultList: data})
     }).catch((err) => {
       console.log('请求失败,失败: ', err)
     })
@@ -102,7 +113,7 @@ class App extends React.Component<any, IState> {
     const link = isName ? nameLink : this.url + newestChapterLink
     return (
       <span 
-        onClick={() => this.handleBookClick(link, isName)}
+        onClick={() => this.handleSearchResultClick(item, isName)}
         className={'link'} 
         // href={link}
         // rel="noopener noreferrer"
@@ -114,8 +125,8 @@ class App extends React.Component<any, IState> {
   }
 
   render () {
-    const {bookList} = this.state
-    if (bookList.length) this.bookCls.push(`${prefix}-search-top`)
+    const {searchResultList, bookInfo} = this.state
+    if (searchResultList.length) this.bookCls.push(`${prefix}-search-top`)
 
     return (
       <div className="App">
@@ -123,20 +134,21 @@ class App extends React.Component<any, IState> {
           <div className={`${prefix}-search-name`}>Novel Speech</div>
           <Search
             className={`${prefix}-search-input`}
-            placeholder="轮回乐园"
+            placeholder="test"
             onSearch={this.handleOnSearch}
-            defaultValue={'轮回乐园'}
+            defaultValue={'test'}
             style={{ width: 500 }}
           />
         </div>
-        {bookList.length && 
+        {searchResultList.length && 
           <div className={`${prefix}-table-wrapper`}>
             <Table 
-              dataSource={bookList} 
+              dataSource={searchResultList} 
               columns={this.columns} 
             />
           </div>
         }
+        {bookInfo && <BookInfo bookInfo={bookInfo}></BookInfo>}
       </div>
     )
   }

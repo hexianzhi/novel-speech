@@ -19,5 +19,23 @@ declare namespace Noval {
     /** 最后更新时间 */
     lastUpdate: string
   }
+
+  interface IBookInfoNode {
+    /** 最后更新时间 */
+    lastUpdateTime: string
+    /** 封面图 */
+    imgSrc: string
+    /** 章节列表 */
+    chapterList: IChapterInfo[]
+  }
+
+  type IBookInfo = IBookInfoNode & ISearchResp
+
+  interface IChapterInfo {
+    /** 章节链接 */
+    link: string
+    /**  章节名字  */
+    chapterName: string
+  }
 }
    
