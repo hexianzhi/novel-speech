@@ -37,5 +37,18 @@ declare namespace Noval {
     /**  章节名字  */
     chapterName: string
   }
+
+  interface IBookDetail {
+    /** 内容 */
+    content: string
+    /** 章节名 */
+    charpterName: string
+    /** 上一章链接 */
+    preChapterLink: string
+    /** 章节目录链接 */
+    chapterListLink: string
+    /** 上一章链接 */
+    nextChapterLink: string
+  }
 }
    

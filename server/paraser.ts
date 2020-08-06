@@ -72,38 +72,24 @@ function parseBookInfo (html: string): Noval.IBookInfoNode {
 
 function parseBookDetail (html: string) {
   const $ = cheerio.load(html)
-  const books = [] as Noval.ISearchResp[]
+  const bookDetail = {} as Noval.IBookDetail
+  bookDetail.content = $('#content').text()
+  // h1
+  bookDetail.charpterName = $('.bookname').children().first().text()
+  $('.bookname .bottem1 a').each((index, aTag) => {
+    if (index === 1) {
+      bookDetail.preChapterLink = $(aTag).attr('href')
+    }
+    // 获取章节列表?
+    if (index === 2) {
+      bookDetail.chapterListLink = $(aTag).attr('href')
+    }
 
-  $('.grid tr').each((index, trEle) => {
-    if (!index) return
-    const tds = $(trEle).find('td')
-    const bookItem = {} as any
-  
-    $(tds).each((tdIndex, tdEle) => {
-      if (tdIndex === 0) {
-        const aTag = $(tdEle).find('a')
-        bookItem.name = aTag.text()
-        bookItem.nameLink = aTag.attr('href')
-      }
-
-      if (tdIndex === 1) {
-        const aTag = $(tdEle).find('a')
-        bookItem.newestChapter = aTag.text()
-        bookItem.newestChapterLink = aTag.attr('href')
-      }
-
-      if (tdIndex === 2) {
-        bookItem.author = $(tdEle).text()
-      }
-
-      if (tdIndex === 3) {
-        bookItem.lastUpdate = $(tdEle).text()
-      }
-    })
-   
-    books.push(bookItem)
+    if (index === 3) {
+      bookDetail.nextChapterLink = $(aTag).attr('href')
+    }
   })
-  return books
+  return bookDetail
 }
 
 

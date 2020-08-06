@@ -1,0 +1,27 @@
+$prefixCls: 'book-info-page';
+
+.#{$prefixCls} {
+  width: 990px;
+  margin: 0 auto;
+  padding-left: calc(100vw - 100%);
+  &-main {
+
+  }
+  &-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none outside none;
+    li {
+      overflow: hidden;
+      width: 290px;
+      height: 40px;
+      padding-right: 60px;
+      border-bottom: 1px solid #ebebeb;
+      list-style: none outside none;
+      overflow: hidden;
+    max-width: 240px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    }
+  }
+}

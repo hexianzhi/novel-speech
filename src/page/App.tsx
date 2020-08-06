@@ -2,7 +2,7 @@ import React from 'react';
 import './App.scss';
 import { Input, Table } from 'antd';
 import Http from 'src/utils/axios'
-import BookInfo from './booInfo'
+import BookInfo from './book-info'
 const { Search } = Input;
 
 interface IState {
@@ -38,7 +38,7 @@ class App extends React.Component<any, IState> {
     }
   ];
   bookCls = [`${prefix}-search`]
-  value = '轮回乐园'
+  value = '我在大唐有后台'
   url = 'http://www.xbiquge.la'
   urlReg= /(http:\/\/(\w+|\.)+)\//g
 
@@ -134,9 +134,9 @@ class App extends React.Component<any, IState> {
           <div className={`${prefix}-search-name`}>Novel Speech</div>
           <Search
             className={`${prefix}-search-input`}
-            placeholder="test"
+            placeholder="我在大唐有后台"
             onSearch={this.handleOnSearch}
-            defaultValue={'test'}
+            defaultValue={'我在大唐有后台'}
             style={{ width: 500 }}
           />
         </div>

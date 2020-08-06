@@ -53,6 +53,8 @@ router.get('/bookDetail', async (ctx: any) => {
   // @ts-ignore unicode 编码解析成字符串
   const outerHTML = DomUtils.getOuterHTML(parseDOM(resp))
   const result = parseBookDetail(outerHTML)
+  
+  // @ts-ignore
   if (result instanceof Object) {
     ctx.body = result
   } else {
