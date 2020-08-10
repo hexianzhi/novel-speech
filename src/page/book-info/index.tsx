@@ -2,52 +2,32 @@ import React from 'react'
 import './index.scss'
 import utils from 'src/utils'
 import Http from 'src/utils/axios'
+import {RouteChildrenProps } from 'react-router-dom'
 
 interface IState {
-  content: any
-  bookDetail: Noval.IBookDetail
+  bookInfo:  Noval.IBookInfo
 }
-interface IProps {
+
+type IProps = {
   bookInfo: Noval.IBookInfo
-}
+} & RouteChildrenProps
 
 const prefixCls = 'book-info-page'
 export default class BookInfoPage extends React.Component<IProps, IState> {
   constructor (props: IProps) {
     super(props)
     this.state = {
-      content: '',
-      bookDetail: {} as Noval.IBookDetail
+      bookInfo: props.location.state
     }
   }
 
   handleClick = (chapter: Noval.IChapterInfo) => {
-    const url = utils.TestURL + '/' + chapter.link
-    // TODO
-    Http.get('bookDetail', {
-      params: {
-        url
-      },
-    }).then((res) => {
-      let detail = res as any as Noval.IBookDetail
-      Object.keys(detail).map(key => {
-        if (/Link/g.test(key) && !utils.isUrl(detail[key])) {
-          detail[key] = utils.TestURL + detail[key]
-        }
-      })
-
-      console.log('-----detail----> ', detail)
-      this.setState({bookDetail: detail})
-    }).catch((err) => {
-      console.log('请求失败,失败: ', err)
-    })
+    this.props.history.push('/bookDetail', chapter)
   }
 
-  
- 
   render () {
-    const {content, bookDetail} = this.state
-    const {bookInfo} = this.props
+    const {bookInfo} = this.state
+    // const {bookInfo} = this.props
 
     return (
       <div className={`${prefixCls}`}>
@@ -65,16 +45,6 @@ export default class BookInfoPage extends React.Component<IProps, IState> {
             <li className={`${prefixCls}-chapter-item`} onClick={() => this.handleClick(chapter)}>{chapter.chapterName}</li>
           ))}
         </ul>
-
-          <div className={'content'}>
-            <div className={'content-header'}>
-              <a href={bookDetail.preChapterLink} target="_blank">上一章</a>
-              <a href={bookDetail.chapterListLink} target="_blank">章节目录</a>
-              <a href={bookDetail.nextChapterLink} target="_blank">下一章</a>
-            </div>
-            <div className={'content-chapter-name'}>{bookDetail.charpterName}</div>
-            {bookDetail.content}
-          </div>
       </div>
     )
   }

@@ -2,7 +2,15 @@ import React from 'react';
 import './App.scss';
 import { Input, Table } from 'antd';
 import Http from 'src/utils/axios'
+import _ from 'lodash'
 import BookInfo from './book-info'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  RouteChildrenProps
+} from "react-router-dom";
 const { Search } = Input;
 
 interface IState {
@@ -12,7 +20,7 @@ interface IState {
 
 
 const prefix = 'app-page'
-class App extends React.Component<any, IState> {
+class App extends React.Component<RouteChildrenProps, IState> {
   columns = [
     {
       title: '书名',
@@ -65,7 +73,9 @@ class App extends React.Component<any, IState> {
     }).then((res: any) => {
       if (isName) {
         const info = Object.assign(res, result)
-        this.setState({bookInfo: info})
+        // this.setState({bookInfo: info})
+    
+        this.props.history.push('/bookInfo', info)
       } else {
         
       }
@@ -85,16 +95,16 @@ class App extends React.Component<any, IState> {
         item.key = index
         return item
       })
-      const testData = [{ 
-        key:'1',
-        name: '测试',
-        nameLink: 'http://www.xbiquge.la/35/35011/',
-        newestChapter: '第二季',
-        newestChapterLink: '/35/35011/17732931.html',
-        author: '小蚊子',
-        lastUpdate: '6-12'
-      }]
-      if (!data) data = testData
+      // const testData = [{ 
+      //   key:'1',
+      //   name: '测试',
+      //   nameLink: 'http://www.xbiquge.la/35/35011/',
+      //   newestChapter: '第二季',
+      //   newestChapterLink: '/35/35011/17732931.html',
+      //   author: '小蚊子',
+      //   lastUpdate: '6-12'
+      // }]
+      // if (!data) data = testData
       this.setState({searchResultList: data})
     }).catch((err) => {
       console.log('请求失败,失败: ', err)
@@ -148,7 +158,7 @@ class App extends React.Component<any, IState> {
             />
           </div>
         }
-        {bookInfo && <BookInfo bookInfo={bookInfo}></BookInfo>}
+        {!_.isEmpty(bookInfo) && <BookInfo bookInfo={bookInfo}></BookInfo>}
       </div>
     )
   }
