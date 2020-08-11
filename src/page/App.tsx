@@ -5,34 +5,46 @@ import Http from 'src/utils/axios'
 import _ from 'lodash'
 import BookInfo from './book-info'
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
   RouteChildrenProps
 } from "react-router-dom";
+// import { dispatch } from '@rematch/core'
+import { connect } from 'react-redux'
+import {IRootState, IDispatch} from 'src/store'
+
 const { Search } = Input;
 
-interface IState {
+ 
+
+const mapState = (state: IRootState) => ({
+  searchResultList: state.base.searchResultList
+})
+
+const mapDispatch = (dispatch: IDispatch) => ({
+  setResultList: dispatch.base.setResultList,
+  setBookInfo: dispatch.base.setBookInfo
+})
+
+ 
+type IProps = ReturnType<typeof mapState> &
+ReturnType<typeof mapDispatch> & 
+RouteChildrenProps & {
   searchResultList: Noval.ISearchResp[]
-  bookInfo: Noval.IBookInfo
 }
 
-
 const prefix = 'app-page'
-class App extends React.Component<RouteChildrenProps, IState> {
+class App extends React.Component<IProps, any> {
   columns = [
     {
       title: '书名',
       dataIndex: 'name',
       key: 'name',
-      render: (value, record) => this.renderLinK(record)
+      render: (value, record, index) => this.renderLinK(record, index)
     },
     {
       title: '最新章节',
       dataIndex: 'newestChapter',
       key: 'newestChapter',
-      render: (value, record) => this.renderLinK(record, false)
+      render: (value, record, index) => this.renderLinK(record, index, false)
     },
     {
       title: '作者',
@@ -45,19 +57,13 @@ class App extends React.Component<RouteChildrenProps, IState> {
       key: 'lastUpdate',
     }
   ];
+
   bookCls = [`${prefix}-search`]
   value = '我在大唐有后台'
   url = 'http://www.xbiquge.la'
   urlReg= /(http:\/\/(\w+|\.)+)\//g
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      searchResultList: [] as Noval.ISearchResp [],
-      bookInfo: {} as Noval.IBookInfo
-    }
-  }
-
+  
   componentDidMount () {
 
   }
@@ -72,9 +78,8 @@ class App extends React.Component<RouteChildrenProps, IState> {
       }
     }).then((res: any) => {
       if (isName) {
-        const info = Object.assign(res, result)
-        // this.setState({bookInfo: info})
-    
+        const info = Object.assign(res, result)   
+        this.props.setBookInfo(info)
         this.props.history.push('/bookInfo', info)
       } else {
         
@@ -90,44 +95,27 @@ class App extends React.Component<RouteChildrenProps, IState> {
       params: {searchkey: value},
     }).then((res) => {
       console.log('search res: ', res);
-      let data = res as unknown as any[]
-      data = data.map((item,index) => {
-        item.key = index
-        return item
-      })
-      // const testData = [{ 
-      //   key:'1',
-      //   name: '测试',
-      //   nameLink: 'http://www.xbiquge.la/35/35011/',
-      //   newestChapter: '第二季',
-      //   newestChapterLink: '/35/35011/17732931.html',
-      //   author: '小蚊子',
-      //   lastUpdate: '6-12'
-      // }]
-      // if (!data) data = testData
-      this.setState({searchResultList: data})
+      let data = res as unknown as Noval.ISearchResp[]
+     
+      this.props.setResultList(data)
     }).catch((err) => {
       console.log('请求失败,失败: ', err)
     })
   }
 
-  renderLinK = (item: Noval.ISearchResp, isName = true) => {
-    const {nameLink, newestChapterLink} = item
+  renderLinK = (item: Noval.ISearchResp, index: number, isName = true) => {
+    const {nameLink} = item
 
     if (!this.url) {
       const result = this.urlReg.exec(nameLink)
       if (result) this.url = result[1]
     }
-
     const text = isName ? item.name : item.newestChapter
-    const link = isName ? nameLink : this.url + newestChapterLink
     return (
       <span 
         onClick={() => this.handleSearchResultClick(item, isName)}
         className={'link'} 
-        // href={link}
-        // rel="noopener noreferrer"
-        // target="_blank"
+        key={item.name + item.nameLink + index}
       >
         {text}  
       </span>
@@ -135,7 +123,8 @@ class App extends React.Component<RouteChildrenProps, IState> {
   }
 
   render () {
-    const {searchResultList, bookInfo} = this.state
+ 
+    const {searchResultList} = this.props
     if (searchResultList.length) this.bookCls.push(`${prefix}-search-top`)
 
     return (
@@ -158,10 +147,11 @@ class App extends React.Component<RouteChildrenProps, IState> {
             />
           </div>
         }
-        {!_.isEmpty(bookInfo) && <BookInfo bookInfo={bookInfo}></BookInfo>}
+ 
       </div>
     )
   }
 }
  
-export default App;
+const AppWrap = connect(mapState, mapDispatch)(App)
+export default AppWrap;

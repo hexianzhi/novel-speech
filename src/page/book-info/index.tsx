@@ -1,33 +1,36 @@
 import React from 'react'
 import './index.scss'
-import utils from 'src/utils'
-import Http from 'src/utils/axios'
 import {RouteChildrenProps } from 'react-router-dom'
+import { connect } from 'react-redux'
+import {IRootState, IDispatch} from 'src/store'
+import _ from 'lodash'
 
-interface IState {
-  bookInfo:  Noval.IBookInfo
-}
+type IProps = RouteChildrenProps<any, Noval.IBookInfo> &
+ReturnType<typeof mapState> &
+ReturnType<typeof mapDispatch>  
 
-type IProps = {
-  bookInfo: Noval.IBookInfo
-} & RouteChildrenProps
+ 
+const mapState = (state: IRootState) => ({
+  bookInfo: state.base.bookInfo,
+  chapter: state.base.chapter
+})
+
+const mapDispatch = (dispatch: IDispatch) => ({
+  setChaprter: dispatch.base.setChaprter
+})
+
 
 const prefixCls = 'book-info-page'
-export default class BookInfoPage extends React.Component<IProps, IState> {
-  constructor (props: IProps) {
-    super(props)
-    this.state = {
-      bookInfo: props.location.state
-    }
-  }
-
+class BookInfoPage extends React.Component<IProps, any> {
+ 
   handleClick = (chapter: Noval.IChapterInfo) => {
-    this.props.history.push('/bookDetail', chapter)
+    this.props.history.push(`/bookDetail`)
+    if(_.isEqual(chapter, this.props.chapter)) return
+    this.props.setChaprter(chapter)
   }
 
   render () {
-    const {bookInfo} = this.state
-    // const {bookInfo} = this.props
+    const bookInfo = this.props.bookInfo 
 
     return (
       <div className={`${prefixCls}`}>
@@ -41,8 +44,8 @@ export default class BookInfoPage extends React.Component<IProps, IState> {
           </div>
         </div>
         <ul className={`${prefixCls}-list`}>
-          {bookInfo.chapterList && bookInfo.chapterList.map(chapter => (
-            <li className={`${prefixCls}-chapter-item`} onClick={() => this.handleClick(chapter)}>{chapter.chapterName}</li>
+          {bookInfo.chapterList && bookInfo.chapterList.map((chapter, index) => (
+            <li key={index} className={`${prefixCls}-chapter-item`} onClick={() => this.handleClick(chapter)}>{chapter.chapterName}</li>
           ))}
         </ul>
       </div>
@@ -50,3 +53,6 @@ export default class BookInfoPage extends React.Component<IProps, IState> {
   }
 
 }
+
+const BookInfoPageWrap = connect(mapState,mapDispatch)(BookInfoPage)
+export default BookInfoPageWrap

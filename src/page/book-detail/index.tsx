@@ -3,55 +3,63 @@ import './index.scss'
 import utils from 'src/utils'
 import Http from 'src/utils/axios'
 import {RouteChildrenProps } from 'react-router-dom'
-
-interface IState {
-  bookDetail:  Noval.IBookDetail
-  chapter: Noval.IChapterInfo
+import { connect } from 'react-redux'
+import {IRootState, IDispatch} from 'src/store'
+import _ from 'lodash'
+ 
+interface IDetailProps {
+  bookDetail: Noval.IBookDetail
 }
 
-type IProps = {
-  bookInfo: Noval.IBookInfo
-} & RouteChildrenProps
+type IProps =  IDetailProps &
+RouteChildrenProps &
+ReturnType<typeof mapState> &
+ReturnType<typeof mapDispatch>  
 
 const prefixCls = 'book-info-page'
-export default class BookDetail extends React.Component<IProps, IState> {
-  constructor (props: IProps) {
-    super(props)
-    this.state = {
-      bookDetail: {} as  Noval.IBookDetail,
-      chapter: props.location.state as Noval.IChapterInfo
-    }
+
+const mapState = (state: IRootState) => ({
+  bookDetail: state.base.bookDetail,
+  chapter: state.base.chapter
+})
+
+const mapDispatch = (dispatch: IDispatch) => ({
+  setBookDetail: dispatch.base.setBookDetail
+})
+
+class BookDetail extends React.Component<IProps, any> {
+ 
+  async componentDidMount () {
+    console.log('BookDetail componentDidMount');
+    await this.getBookDetail()
   }
 
-  componentDidMount () {
-    const {chapter} = this.state
-    console.log('-----chapter----> ', chapter)
-    const url = utils.TestURL + '/' + chapter.link
+
+  getBookDetail () {
+    const url = utils.TestURL + this.props.chapter.link
     // TODO
     Http.get('bookDetail', {
       params: {
         url
       },
     }).then((res) => {
-      let detail = res as any as Noval.IBookDetail
+      console.log('bookDetail res: ', res);
+      const detail = res as any as Noval.IBookDetail
       Object.keys(detail).map(key => {
         if (/Link/g.test(key) && !utils.isUrl(detail[key])) {
           detail[key] = utils.TestURL + detail[key]
         }
       })
-      console.log('-----detail----> ', detail)
-      this.setState({bookDetail: detail})
+      this.props.setBookDetail(detail)
     }).catch((err) => {
       console.log('请求失败,失败: ', err)
     })
   }
-
  
   
  
   render () {
-    const {bookDetail} = this.state
-    // const {bookInfo} = this.props
+    const bookDetail = this.props.bookDetail
 
     return (
       <div className={`${prefixCls}`}>
@@ -69,3 +77,6 @@ export default class BookDetail extends React.Component<IProps, IState> {
   }
 
 }
+
+const BookDetailWrap = connect(mapState, mapDispatch)(BookDetail)
+export default BookDetailWrap;
