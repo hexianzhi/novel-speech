@@ -6,7 +6,10 @@ import {RouteChildrenProps } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {IRootState, IDispatch} from 'src/store'
 import _ from 'lodash'
- 
+import Speech from 'src/utils/speechSyn'
+import { Button } from 'antd'
+import { PlayCircleOutlined } from '@ant-design/icons';
+
 interface IDetailProps {
   bookDetail: Noval.IBookDetail
 }
@@ -56,10 +59,14 @@ class BookDetail extends React.Component<IProps, any> {
     })
   }
  
+  play = () => {
+    const {bookDetail} = this.props
+    Speech.speak(bookDetail.content)
+  }
   
  
   render () {
-    const bookDetail = this.props.bookDetail
+    const {bookDetail} = this.props
 
     return (
       <div className={`${prefixCls}`}>
@@ -71,6 +78,9 @@ class BookDetail extends React.Component<IProps, any> {
             </div>
             <div className={'content-chapter-name'}>{bookDetail.charpterName}</div>
             {bookDetail.content}
+          </div>
+          <div>
+            <PlayCircleOutlined onClick={this.play} />
           </div>
       </div>
     )
