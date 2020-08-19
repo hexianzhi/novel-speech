@@ -8,7 +8,8 @@ import {IRootState, IDispatch} from 'src/store'
 import _ from 'lodash'
 import Speech from 'src/utils/speechSyn'
 import { Button } from 'antd'
-import { PlayCircleOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, PauseCircleOutlined } from '@ant-design/icons';
+import './index.scss'
 
 interface IDetailProps {
   bookDetail: Noval.IBookDetail
@@ -32,6 +33,8 @@ const mapDispatch = (dispatch: IDispatch) => ({
 
 class BookDetail extends React.Component<IProps, any> {
  
+  hasPlayed = false
+
   async componentDidMount () {
     console.log('BookDetail componentDidMount');
     await this.getBookDetail()
@@ -61,7 +64,16 @@ class BookDetail extends React.Component<IProps, any> {
  
   play = () => {
     const {bookDetail} = this.props
-    Speech.speak(bookDetail.content)
+    if (this.hasPlayed) {
+      Speech.start()
+      return
+    }
+    Speech.start(bookDetail.content)
+    this.hasPlayed = true
+  }
+
+  stop = () => {
+    Speech.stop()
   }
   
  
@@ -79,8 +91,9 @@ class BookDetail extends React.Component<IProps, any> {
             <div className={'content-chapter-name'}>{bookDetail.charpterName}</div>
             {bookDetail.content}
           </div>
-          <div>
-            <PlayCircleOutlined onClick={this.play} />
+          <div className={'play-btn'}>
+            <PlayCircleOutlined  style={{ fontSize: '40px', color: '#08c' }} onClick={this.play} />
+            <PauseCircleOutlined style={{ fontSize: '40px', color: '#08c' }} onClick={this.stop}/>
           </div>
       </div>
     )

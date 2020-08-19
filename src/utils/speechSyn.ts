@@ -8,6 +8,7 @@ let voicesList: SpeechSynthesisVoice[] = synth.getVoices();
 let voiceType = {} as SpeechSynthesisVoice
 /** 语音设置 */
 let voiceConfig = {} as IVoiceConfig
+let voiceUnit = {} as SpeechSynthesisUtterance
 
 /** 设置语音类型 */
 function setVoiceType (voice: SpeechSynthesisVoice) {
@@ -20,15 +21,29 @@ function setVoiceConfig (config: IVoiceConfig) {
 }
 
 /** 发声 */
-function speak (content: string) {
-  let voiceUnit = new SpeechSynthesisUtterance(content);
-  // voiceUnit = {...voiceUnit, ...voiceConfig}
+function start (content?: string) {
+  
+  
+  if (!content) {
+    synth.resume()
+    return
+  }
+    
+  voiceUnit = new SpeechSynthesisUtterance(content)
   synth.speak(voiceUnit);
-}
+  synth.pause()
+  synth.resume()
  
+}
+
+function stop () {
+  synth.pause()
+}
+
 export default {
   voicesList,
   setVoiceType,
   setVoiceConfig,
-  speak
+  start,
+  stop
 }
