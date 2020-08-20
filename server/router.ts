@@ -30,7 +30,13 @@ router.get('/search', async (ctx: any) => {
 router.get('/bookInfo', async (ctx: any) => {
   console.log('bookInfoctx.query.url: ', ctx.query.url);
   if (!ctx.query.url) ctx.throw(400, '找不到地址')
+  
+  console.log('-----开始请求!!')
+  let time = Date.now()
+
   const resp = await Request.requestDocument(ctx.query.url, ctx) as unknown as string
+  console.log('-----请求完成!!', Number((Date.now() - time) / 1000) , 's')
+
   // @ts-ignore unicode 编码解析成字符串
   const outerHTML = DomUtils.getOuterHTML(parseDOM(resp))
   const result = parseBookInfo(outerHTML)

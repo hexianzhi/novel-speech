@@ -45,8 +45,8 @@
     "urijs": "^1.19.2"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "cross-env NODE_ENV=development react-app-rewired start",
+    "build": "cross-env NODE_ENV=production react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
     "server:start": "npm-run-all --parallel server:build server:watch",

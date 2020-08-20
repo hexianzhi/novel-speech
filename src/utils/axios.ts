@@ -1,11 +1,12 @@
 
 import axios from 'axios'
 
-const target = 'http://106.55.9.70:3000'
+const target = 'http://106.55.9.70:3004'
 const local = 'http://localhost:3004'
+const URL = process.env.NODE_ENV === 'production' ? target : local 
 
 let http = axios.create({
-  baseURL: `${local}/`,
+  baseURL: `${URL}/`,
   timeout: 12000
   // responseType: 'json',
 })

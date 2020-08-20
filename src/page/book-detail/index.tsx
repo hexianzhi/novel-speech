@@ -41,8 +41,11 @@ class BookDetail extends React.Component<IProps, any> {
   }
 
 
-  getBookDetail () {
-    const url = utils.TestURL + this.props.chapter.link
+  getBookDetail (Link?: string) {
+    let url = Link 
+    if (!Link) {
+      url = utils.TestURL + this.props.chapter.link
+    }
     // TODO
     Http.get('bookDetail', {
       params: {
@@ -84,9 +87,9 @@ class BookDetail extends React.Component<IProps, any> {
       <div className={`${prefixCls}`}>
           <div className={'content'}>
             <div className={'content-header'}>
-              <a href={bookDetail.preChapterLink} target="_blank">上一章</a>
-              <a href={bookDetail.chapterListLink} target="_blank">章节目录</a>
-              <a href={bookDetail.nextChapterLink} target="_blank">下一章</a>
+              <a onClick={() => this.getBookDetail(bookDetail.preChapterLink)}>上一章</a>
+              <a onClick={() => this.props.history.push('/bookInfo')}>章节目录</a>
+              <a  onClick={() => this.getBookDetail(bookDetail.nextChapterLink)}>下一章</a>
             </div>
             <div className={'content-chapter-name'}>{bookDetail.charpterName}</div>
             {bookDetail.content}

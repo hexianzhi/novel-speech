@@ -40,7 +40,8 @@ const updateTimeReg =  /(最后更新(.+|\s+))/
 
 function parseBookInfo (html: string): Noval.IBookInfoNode {
   const $ = cheerio.load(html)
-  console.log('html: ', html);
+  console.log('-----开始解析!!')
+  let time = Date.now()
 
   // TODO 自动解析获取字段。 正则思路指导： /最新章节.{0, 20}/
   const imgSrc = $('#fmimg').find('img').attr('src');
@@ -59,10 +60,10 @@ function parseBookInfo (html: string): Noval.IBookInfoNode {
       chapterName
     })
   })
-  console.log('chapterList: ', chapterList);
-  console.log('imgSrc: ', imgSrc);
-  console.log('lastUpdateTime: ', lastUpdateTime);
-  return {
+
+ console.log('-----解析完成!!', Number((Date.now() - time) / 1000) , 's')
+  
+ return {
     imgSrc,
     lastUpdateTime,
     chapterList
