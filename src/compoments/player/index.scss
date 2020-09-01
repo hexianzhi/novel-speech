@@ -1,0 +1,12 @@
+$play-bar: 'player-bar';
+
+.#{$play-bar} {
+  position: fixed;
+  display: flex;
+  height: 50px;
+  width: 100%;
+  bottom: 0;
+  left:0;
+  // left: 50px;
+  background:#efb336;
+}

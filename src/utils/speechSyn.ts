@@ -22,8 +22,7 @@ function setVoiceConfig (config: IVoiceConfig) {
 
 /** 发声 */
 function start (content?: string) {
-  
-  
+  console.log('----- start speech!!')
   if (!content) {
     synth.resume()
     return
@@ -37,7 +36,9 @@ function start (content?: string) {
 }
 
 function stop () {
+  console.log('-----stop speech!!')
   synth.pause()
+  synth.cancel()
 }
 
 export default {

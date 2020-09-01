@@ -9,6 +9,8 @@ import _ from 'lodash'
 import Speech from 'src/utils/speechSyn'
 import { Button } from 'antd'
 import { PlayCircleOutlined, PauseCircleOutlined } from '@ant-design/icons';
+import Setting from 'src/compoments/setting'
+import Player from 'src/compoments/player'
 import './index.scss'
 
 interface IDetailProps {
@@ -94,10 +96,8 @@ class BookDetail extends React.Component<IProps, any> {
             <div className={'content-chapter-name'}>{bookDetail.charpterName}</div>
             {bookDetail.content}
           </div>
-          <div className={'play-btn'}>
-            <PlayCircleOutlined  style={{ fontSize: '40px', color: '#08c' }} onClick={this.play} />
-            <PauseCircleOutlined style={{ fontSize: '40px', color: '#08c' }} onClick={this.stop}/>
-          </div>
+          <Setting onPlay={this.play} onPause={this.stop}></Setting>
+          <Player></Player>
       </div>
     )
   }

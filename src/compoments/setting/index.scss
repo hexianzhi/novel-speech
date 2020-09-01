@@ -1,0 +1,12 @@
+$setting-bar: 'setting-bar';
+
+.#{$setting-bar} {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  width: 80px;
+  top:100px;
+  left: 50px;
+  background:#efb336;
+}
