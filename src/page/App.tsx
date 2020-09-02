@@ -10,18 +10,23 @@ import {
 // import { dispatch } from '@rematch/core'
 import { connect } from 'react-redux'
 import {IRootState, IDispatch} from 'src/store'
+import {storageLocal} from 'src/utils/base'
+import {THEME, FONT_FAMILY, FONT_SIZE, PAGE_WIDTH } from 'src/utils/constant'
+
 
 const { Search } = Input;
 
  
 
 const mapState = (state: IRootState) => ({
-  searchResultList: state.base.searchResultList
+  searchResultList: state.base.searchResultList,
+  contentSetting: state.base.contentSetting
 })
 
 const mapDispatch = (dispatch: IDispatch) => ({
   setResultList: dispatch.base.setResultList,
-  setBookInfo: dispatch.base.setBookInfo
+  setBookInfo: dispatch.base.setBookInfo,
+  setContentSetting: dispatch.base.setContentSetting
 })
 
  
@@ -65,7 +70,8 @@ class App extends React.Component<IProps, any> {
 
   
   componentDidMount () {
-
+    // TODO 初始化 stoge
+    const setting = storageLocal.get('THEME')
   }
 
   /** 搜素结果列表点击事件 */

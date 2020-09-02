@@ -1,5 +1,7 @@
 export const base = {
   state: {
+    // 内容设置
+    contentSetting: {} as React.CSSProperties,
     searchResultList: [] as Noval.ISearchResp[],
     bookDetail: {} as Noval.IBookDetail,
     bookInfo: {} as Noval.IBookInfo,
@@ -31,7 +33,12 @@ export const base = {
         chapter
       }
     },
-
+    setContentSetting (state, setting: React.CSSProperties) {
+      return {
+        ...state,
+        setting
+      }
+    }
   },
   effects: {
  
